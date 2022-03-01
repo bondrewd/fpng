@@ -40,7 +40,11 @@ const ArgumentParser = argparse.ArgumentParser(.{
     },
 });
 
-fn writeBytesNTimes(writer: anytype, bytes: []const u8, n: usize) !void {
+fn writeFloatNTimes(comptime T: type, writer: anytype, float: T, n: usize) !void {
+    const float_info = @typeInfo(T).Float;
+    var bytes = @bitCast([float_info.bits / 8]u8, float);
+    std.mem.reverse(u8, bytes[0..]);
+
     var i: usize = 0;
     while (i < n) : (i += 1) for (bytes) |byte| try writer.writeByte(byte);
 }
@@ -64,14 +68,10 @@ pub fn main() anyerror!void {
     if (args.constant.len > 0) {
         if (args.double_precision) {
             const constant = try std.fmt.parseFloat(f64, args.constant);
-            var bytes = @bitCast([8]u8, constant);
-            std.mem.reverse(u8, bytes[0..]);
-            try writeBytesNTimes(w, bytes[0..], length);
+            try writeFloatNTimes(f64, w, constant, length);
         } else {
             const constant = try std.fmt.parseFloat(f32, args.constant);
-            var bytes = @bitCast([4]u8, constant);
-            std.mem.reverse(u8, bytes[0..]);
-            try writeBytesNTimes(w, bytes[0..], length);
+            try writeFloatNTimes(f32, w, constant, length);
         }
     }
 }
