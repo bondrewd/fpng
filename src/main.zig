@@ -11,7 +11,7 @@ const ArgumentParser = argparse.ArgumentParser(.{
             .name = "double_precision",
             .short = "-d",
             .long = "--double-precision",
-            .description = "Use f64 instead of f32 for generating the time series.",
+            .description = "Use f64 instead of f32 for generating the time series",
         },
     },
     .{
@@ -67,7 +67,7 @@ const ArgumentParser = argparse.ArgumentParser(.{
         .positional = .{
             .name = "length",
             .metavar = "LENGTH",
-            .description = "Time series length.",
+            .description = "Time series length",
         },
     },
     .{
