@@ -33,11 +33,11 @@ pub fn main() anyerror!void {
     defer arena.deinit();
     var allocator = arena.allocator();
 
-    // Arguments
+    // Get Arguments
     var args = try ArgumentParser.parseArgumentsAllocator(allocator);
 
-    // Typecast arguments
-    const length = std.fmt.parseInt(usize, args.length, 10) catch return parsing_error(usize, args.length);
+    // Set default values
+    const output = if (args.output.len > 0) args.output else "out";
     const mu_str = if (args.mu.len > 0) args.mu else "0.0";
     const sigma_str = if (args.sigma.len > 0) args.sigma else "0.0";
     const number_str = if (args.number.len > 0) args.number else "0.0";
@@ -56,42 +56,38 @@ pub fn main() anyerror!void {
     const random = prng.random();
 
     if (args.double_precision) {
-        // Box-Muller
-        const mu = std.fmt.parseFloat(f64, mu_str) catch return parsing_error(f64, mu_str);
-        const sigma = std.fmt.parseFloat(f64, sigma_str) catch return parsing_error(f64, sigma_str);
-
-        var noise_genator = BoxMuller(f64).init(random, mu, sigma);
-
         // Parameters
         const number = std.fmt.parseFloat(f64, number_str) catch return parsing_error(f64, number_str);
+        const length = std.fmt.parseInt(usize, args.length, 10) catch return parsing_error(usize, args.length);
         const increment = std.fmt.parseFloat(f64, increment_str) catch return parsing_error(f64, increment_str);
 
+        // Noise generator
+        const mu = std.fmt.parseFloat(f64, mu_str) catch return parsing_error(f64, mu_str);
+        const sigma = std.fmt.parseFloat(f64, sigma_str) catch return parsing_error(f64, sigma_str);
+        var noise_genator = BoxMuller(f64).init(random, mu, sigma);
+
         // Output file
-        const output = args.output;
         var file = try std.fs.cwd().createFile(output, .{});
         defer file.close();
-        const fw = file.writer();
 
         // Generate time series
-        try writeNumberNTimesWithIncrementNoise(f64, fw, number, length, increment, &noise_genator);
+        try writeNumberNTimesWithIncrementNoise(f64, file.writer(), number, length, increment, &noise_genator);
     } else {
-        // Box-Muller
-        const mu = std.fmt.parseFloat(f32, mu_str) catch return parsing_error(f32, mu_str);
-        const sigma = std.fmt.parseFloat(f32, sigma_str) catch return parsing_error(f32, sigma_str);
-
-        var noise_genator = BoxMuller(f32).init(random, mu, sigma);
-
         // Parameters
         const number = std.fmt.parseFloat(f32, number_str) catch return parsing_error(f32, number_str);
+        const length = std.fmt.parseInt(usize, args.length, 10) catch return parsing_error(usize, args.length);
         const increment = std.fmt.parseFloat(f32, increment_str) catch return parsing_error(f32, increment_str);
 
+        // Noise generator
+        const mu = std.fmt.parseFloat(f32, mu_str) catch return parsing_error(f32, mu_str);
+        const sigma = std.fmt.parseFloat(f32, sigma_str) catch return parsing_error(f32, sigma_str);
+        var noise_genator = BoxMuller(f32).init(random, mu, sigma);
+
         // Output file
-        const output = args.output;
         var file = try std.fs.cwd().createFile(output, .{});
         defer file.close();
-        const fw = file.writer();
 
         // Generate time series
-        try writeNumberNTimesWithIncrementNoise(f32, fw, number, length, increment, &noise_genator);
+        try writeNumberNTimesWithIncrementNoise(f32, file.writer(), number, length, increment, &noise_genator);
     }
 }
