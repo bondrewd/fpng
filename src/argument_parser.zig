@@ -63,7 +63,7 @@ pub const ArgumentParser = argparse.ArgumentParser(.{
             .name = "seed",
             .long = "--seed",
             .metavar = "N",
-            .description = "Seed for generating random numbers.",
+            .description = "Seed for generating random numbers",
             .takes = 1,
         },
     },
