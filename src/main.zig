@@ -37,7 +37,7 @@ pub fn main() anyerror!void {
     var args = try ArgumentParser.parseArgumentsAllocator(allocator);
 
     // Set default values
-    const output = if (args.output.len > 0) args.output else "out";
+    const output = args.output;
     const mu_str = if (args.mu.len > 0) args.mu else "0.0";
     const sigma_str = if (args.sigma.len > 0) args.sigma else "0.0";
     const number_str = if (args.number.len > 0) args.number else "0.0";
