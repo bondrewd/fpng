@@ -34,7 +34,7 @@ pub fn main() anyerror!void {
     var allocator = arena.allocator();
 
     // Get Arguments
-    var args = try ArgumentParser.parseArgumentsAllocator(allocator);
+    var args = ArgumentParser.parseArgumentsAllocator(allocator) catch return;
 
     // Random number generator
     var prng = std.rand.DefaultPrng.init(blk: {
