@@ -2,7 +2,7 @@ const argparse = @import("argparse");
 
 pub const ArgumentParser = argparse.ArgumentParser(.{
     .app_name = "fpng",
-    .app_description = "Floating-point number generator.",
+    .app_description = "Floating-point number generator",
     .app_version = .{ .major = 0, .minor = 1, .patch = 0 },
 }, &[_]argparse.AppOptionPositional{
     .{
@@ -10,7 +10,7 @@ pub const ArgumentParser = argparse.ArgumentParser(.{
             .name = "double_precision",
             .short = "-d",
             .long = "--double-precision",
-            .description = "Use f64 instead of f32 for generating the time series",
+            .description = "Use f64 instead of f32 for generating time series",
         },
     },
     .{
@@ -19,7 +19,7 @@ pub const ArgumentParser = argparse.ArgumentParser(.{
             .short = "-n",
             .long = "--number",
             .metavar = "N",
-            .description = "Generate time series using as initial value the number N",
+            .description = "Generate time series using N as initial value",
             .takes = 1,
             .default = &.{"0.0"},
         },
@@ -30,7 +30,7 @@ pub const ArgumentParser = argparse.ArgumentParser(.{
             .short = "-i",
             .long = "--increment",
             .metavar = "N",
-            .description = "Increment at each step by N",
+            .description = "Increment by N at each step",
             .takes = 1,
             .default = &.{"0.0"},
         },
