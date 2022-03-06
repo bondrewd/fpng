@@ -35,6 +35,7 @@ pub fn main() anyerror!void {
 
     // Get Arguments
     var args = ArgumentParser.parseArgumentsAllocator(allocator) catch return;
+    defer ArgumentParser.deinitArgs(args);
 
     // Random number generator
     var prng = std.rand.DefaultPrng.init(blk: {
